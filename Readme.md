@@ -1,5 +1,5 @@
 
-Esempi di uso di OAuth 2.0
+Esempi di uso di OAuth 2.0 e OpenID Connect
 ==========================
 
 Struttura del repository
@@ -9,10 +9,12 @@ Sono presenti due cartelle:
 
 * oauth-client: contiene l'esempio del client oauth
 * oauth-server: contiene l'esempio di server oauth
+* oidc-client: contiene l'esempio di client OpenID Connect 
+* oidc-server: contiene l'esempio server OpenID Connect
 
  
-Setup del client
-------------------
+Setup del client OAuth 2.0
+--------------------------
 
 Per utilizzare il client è necessario avere installato sulla propria macchina:
 
@@ -32,7 +34,7 @@ composer install
 L'applicazione verrà  eseguita localmente lanciando il comando:
 
 ```
-php artisan serveè
+php artisan serve
 ```
 
 e rimarrà in esecuzione sull'indirizzo:
@@ -67,7 +69,7 @@ A questo punto la configurazione è completa ed è possibile utilizzare il clien
 
 
  
-Setup del server e Client Passport
+Setup del server OAuth 2.0 e Client Passport
 ------------------
 
 Per utilizzare il server è necessario avere installato sulla propria macchina:
@@ -146,6 +148,96 @@ Una volta ottenuti questi dati è necessario configurare il client nel file _oau
 A questo punto anche il client è pronto per comunicare con il server.
 
 Per testare il funzionamento: dalla home page del client (http://localhost:8000/) premere il pulsante _Login with passport_.
+
+
+Setup del client OpenID Connect
+--------------------------
+
+Per utilizzare il client è necessario avere installato sulla propria macchina:
+
+* PHP 5.6
+* [composer](https://getcomposer.org/) 
+
+Di seguito gli step per eseguire il progetto. 
+
+Entrare tramite riga di comando nella cartella del client del progetto.
+
+Ripristinare le dipendenze del progetto:
+
+```
+composer install
+```
+
+L'applicazione verrà  eseguita localmente lanciando il comando:
+
+```
+php artisan serve
+```
+
+e rimarrà in esecuzione sull'indirizzo:
+
+* http://localhost:8000/
+
+
+Registrare il client su uno OpenID Connect provider, ad esempio Auth0 indicando come indirizzo di redirect rispettivamente:
+
+* http://localhost:8000/login/occ/oauth0/redirect/
+* http://localhost:8000/login/oidc/oauth0/redirect/
+
+A valle del processo di registrazione sarà necessario inserire nel file di configurazione del client _client id_ e _client secret_.
+
+Il file di configurazione deve essere creato nella cartella _oidc-client_ con nome _.env_ , E' possibile prendere come traccia il file _.env.example_.
+
+I valore da configurare sono:
+
+* OIDC\_URL: https://xxxxx.eu.auth0.com/
+* OIDC\_CLIENT_ID: client id Auht0
+* OIDC\_CLIENT_SECRET: client id Auht0
+
+
+Setup del server OAuth 2.0 e Client Passport
+------------------
+
+Per utilizzare il server è necessario avere installato sulla propria macchina:
+
+* PHP 5.6
+* [composer](https://getcomposer.org/) 
+* mysql 
+
+Tutti i file del server sono presenti nella cartella _oauth-server_.
+
+Entrare tramite riga di comando nella cartella del server del progetto.
+
+Ripristinare le dipendenze del progetto:
+
+```
+composer install
+```
+
+Come primo passo è necessario creare la configurazione del database attraverso il file _.env_ in particolare le impostazione del database nella sezione DB, E' possibile utilizzare come punto di partenza il file _.env.example_.
+
+Il database impostato deve esistere già all'interno del server. 
+
+Una volta completata la configurazione è possibile creare le tabelle del server con il comando:
+
+```
+php artisan migrate
+```
+
+e inizializzare i dati del client di test con:
+
+```
+php artisan db:seed
+```
+
+A questo punto il server è pronto per essere utilizzato. Per eseguire il server (sulla porta 8010) E' possibile usare il comando:
+
+```
+php artisan serve --port 8010
+```
+
+
+Per testare il funzionamento: dalla home page del client (http://localhost:8000/) premere il pulsante _Login with local server_.
 
 
 Note
